@@ -146,11 +146,14 @@ module Mail
         line = ""
         while !words.empty?
           break unless word = words.first.dup
-          begin
-            word.encode!(charset, :undef => :replace, :invalid => :replace) if
-              defined?(Encoding) && charset && word.respond_to?(:encode!)
-          rescue
-            word.force_encoding(charset)
+          if defined?(Encoding)
+            begin
+              word.encode!(charset, :undef => :replace, :invalid => :replace) if
+                defined?(Encoding) && charset && word.respond_to?(:encode!)
+            rescue Encoding::ConverterNotFoundError
+            rescue
+              word.force_encoding(charset)
+            end
           end
           word = encode(word) if should_encode
           word = encode_crlf(word)

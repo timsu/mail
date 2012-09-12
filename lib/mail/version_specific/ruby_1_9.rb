@@ -55,7 +55,7 @@ module Mail
         str = Ruby19.decode_base64(match[2])
         begin
           str.force_encoding(fix_encoding(encoding))
-        rescue
+        rescue ArgumentError
           str.force_encoding("utf-8")
         end
       end
