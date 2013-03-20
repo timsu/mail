@@ -53,7 +53,11 @@ module Mail
       if match
         charset = match[1]
         str = Ruby19.decode_base64(match[2])
-        str.force_encoding(pick_encoding(charset))
+        begin
+          str.force_encoding(fix_encoding(encoding))
+        rescue
+          str.force_encoding("utf-8")
+        end
       end
       decoded = str.encode("utf-8", :invalid => :replace, :replace => "")
       decoded.valid_encoding? ? decoded : decoded.encode("utf-16le", :invalid => :replace, :replace => "").encode("utf-8")
