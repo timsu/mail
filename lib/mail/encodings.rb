@@ -141,7 +141,7 @@ module Mail
             end
           end
         end
-      end.flatten.join("")
+      end.flatten.map { |s| s.force_encoding('utf-8') }.join("")
     end
 
     # Takes an encoded string of the format =?<encoding>?[QB]?<string>?=
